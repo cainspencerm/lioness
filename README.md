@@ -1,0 +1,2 @@
+# lioness
+ Lioness is a lightweight utility that monitors a specified directory for files matching user-defined patterns. Once matching files are detected, the tool automatically uploads them to configured cloud storage providers (e.g., AWS S3, Google Cloud Storage, Azure Blob Storage, etc.). It simplifies file synchronization across cloud environments, making it ideal for automation workflows, backup solutions, or cloud-based file processing pipelines.
