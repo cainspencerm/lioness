@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@nextui-org/react"
 import { useRules } from "../lib/hooks"
+import { AdjustmentsHorizontalIcon, TrashIcon } from "@heroicons/react/20/solid"
 
 export function RuleTable() {
   const { rules, modifyRule, deleteRule } = useRules()
@@ -34,11 +35,9 @@ export function RuleTable() {
             <TableCell>{rule.directory}</TableCell>
             <TableCell>{rule.fileNames.join(", ")}</TableCell>
             <TableCell>{rule.fileTypes.join(", ")}</TableCell>
-            <TableCell>
-              <Button size="sm">Edit</Button>
-              <Button size="sm" onClick={() => handleDeleteRule(idx)}>
-                Delete
-              </Button>
+            <TableCell className="flex gap-2">
+              <Button size="sm" variant="light" title="Edit Rule" className="hover:text-blue-500" isIconOnly startContent={<AdjustmentsHorizontalIcon className="w-5 h-5" />} />
+              <Button size="sm" variant="light" title="Delete Rule" className="hover:text-red-500" isIconOnly startContent={<TrashIcon className="w-5 h-5" />} onClick={() => handleDeleteRule(idx)} />
             </TableCell>
           </TableRow>
         ))}
