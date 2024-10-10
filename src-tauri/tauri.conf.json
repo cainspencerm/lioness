@@ -7,12 +7,16 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "lioness",
-    "version": "0.1.0"
+    "productName": "Lioness",
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "fs": {
+        "scope": ["$APPDATA/*"],
+        "readFile": true,
+        "writeFile": true
+      }
     },
     "bundle": {
       "active": true,
@@ -29,7 +33,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.das.dev",
+      "identifier": "com.lioness.app",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -60,7 +64,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "lioness",
+        "title": "Lioness",
         "width": 800
       }
     ]
