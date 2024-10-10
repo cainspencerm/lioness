@@ -10,7 +10,8 @@
     "format:staged": "prettier --write $(git diff --staged --name-only --diff-filter d | xargs)",
     "next": "next src-next",
     "clippy": "cargo clippy --manifest-path ./src-tauri/Cargo.toml",
-    "next-build": "next build src-next"
+    "next-build": "next build src-next",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.6.0",
@@ -20,7 +21,6 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.6.2",
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
