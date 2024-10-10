@@ -14,7 +14,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
+    "@nextui-org/react": "^2.4.8",
+    "@nextui-org/system": "^2.2.6",
+    "@nextui-org/theme": "^2.2.11",
     "@tauri-apps/api": "^1.6.0",
+    "framer-motion": "^11.11.7",
+    "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
