@@ -1,0 +1,24 @@
+# Get the range of commits between local HEAD and the upstream branch
+# $1 is the name of the remote and $2 is the remote branch
+remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+
+# Find the changes in all commits that will be pushed
+changes=$(git diff --name-only HEAD $remote_branch)
+
+# Check if any of the changed files are in the 'app' directory
+if echo "$changes" | grep -q 'app/'; then
+  echo "Changes detected in 'app' directory. Running build..."
+  
+  # Run the build command
+  npm run next-build
+  
+  # Check if the build failed
+  if [ $? -ne 0 ]; then
+    echo "Build failed! Push aborted."
+    exit 1
+  else
+    echo "Build succeeded!"
+  fi
+else
+  echo "No changes in 'app' directory. Skipping build."
+fi

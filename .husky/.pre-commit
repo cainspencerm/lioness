@@ -1,0 +1,12 @@
+if [[ $(git diff --cached --name-only) ]]; then
+  # Get the list of staged files that can be formatted
+  files_to_format=$(git diff --cached --name-only --diff-filter d | xargs)
+
+  # Format the files
+  if [[ $files_to_format ]]; then
+    npm run format:staged
+    git diff --staged --name-only --diff-filter d | xargs | git add
+  fi
+
+  npm run lint
+fi

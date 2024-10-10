@@ -1,0 +1,3 @@
+# Ignore anything outside of src-next/app
+/*
+!src-next/app/**
