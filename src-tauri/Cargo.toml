@@ -5,7 +5,7 @@ description = "A Tauri App"
 authors = ["Spencer Cain <cainspencerm@protonmail.com>"]
 license = "MIT"
 repository = "github.com/cainspencerm/lioness"
-edition = "2024"
+edition = "2021"
 rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
