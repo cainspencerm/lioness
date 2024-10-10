@@ -1,11 +1,11 @@
 [package]
 name = "lioness"
-version = "0.0.0"
+version = "0.0.1"
 description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-edition = "2021"
+authors = ["Spencer Cain <cainspencerm@protonmail.com>"]
+license = "MIT"
+repository = "github.com/cainspencerm/lioness"
+edition = "2024"
 rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
