@@ -1,2 +1,38 @@
-# lioness
- Lioness is a lightweight utility that monitors a specified directory for files matching user-defined patterns. Once matching files are detected, the tool automatically uploads them to configured cloud storage providers (e.g., AWS S3, Google Cloud Storage, Azure Blob Storage, etc.). It simplifies file synchronization across cloud environments, making it ideal for automation workflows, backup solutions, or cloud-based file processing pipelines.
+<p align="center"><img src="https://i.imgur.com/a9QWW0v.png"></p>
+
+## Usage
+
+### Create an App
+
+```
+# with npx
+$ npx create-nextron-app my-app --example with-tailwindcss
+
+# with yarn
+$ yarn create nextron-app my-app --example with-tailwindcss
+
+# with pnpm
+$ pnpm dlx create-nextron-app my-app --example with-tailwindcss
+```
+
+### Install Dependencies
+
+```
+$ cd my-app
+
+# using yarn or npm
+$ yarn (or `npm install`)
+
+# using pnpm
+$ pnpm install --shamefully-hoist
+```
+
+### Use it
+
+```
+# development mode
+$ yarn dev (or `npm run dev` or `pnpm run dev`)
+
+# production build
+$ yarn build (or `npm run build` or `pnpm run build`)
+```
