@@ -123,6 +123,13 @@ export function AddRuleModal({ isOpen, onClose }) {
     updateFilters(Array.from(newFilters))
   }
 
+  const isSubmittable = (() => {
+    const name = rule.name.trim()
+    const directory = rule.directory.trim()
+
+    return name !== "" && directory !== ""
+  })()
+
   return (
     <Modal
       placement="center"
@@ -199,7 +206,9 @@ export function AddRuleModal({ isOpen, onClose }) {
         </ModalBody>
         <ModalFooter>
           <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleAddRule}>Add Rule</Button>
+          <Button isDisabled={!isSubmittable} onClick={handleAddRule}>
+            Add Rule
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

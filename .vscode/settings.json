@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "rules",
     "frame.io",
-    "context-bridge"
+    "context-bridge",
+    "uploads"
   ]
 }

@@ -1,8 +1,10 @@
+import { UploadTable } from "./components/UploadTable"
+
 export default function UploadsPage() {
   return (
-    <div>
+    <div className="prose prose-invert max-w-none">
       <h1>Uploads</h1>
-      <p>Uploads page content goes here...</p>
+      <UploadTable />
     </div>
   )
 }

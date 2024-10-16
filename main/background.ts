@@ -1,16 +1,25 @@
-import path from "path"
 import { app, dialog, ipcMain } from "electron"
 import serve from "electron-serve"
+import path from "path"
 import { createWindow } from "./helpers"
 import {
-  initialize,
+  addUpload,
+  deleteUpload,
+  getFrameIoToken,
+  getUpload,
+  getUploadByPath,
+  getUploads,
+  modifyUpload,
+  setFrameIoToken,
+} from "./rules-management/db"
+import {
   addRule,
-  modifyRule,
   deleteRule,
   getAllRules,
   getSingleRule,
+  initialize,
+  modifyRule,
 } from "./rules-management/rules-service"
-import { getFrameIoToken, setFrameIoToken } from "./rules-management/db"
 
 const isProd = process.env.NODE_ENV === "production"
 
@@ -78,6 +87,31 @@ ipcMain.handle("get-rules", async () => {
 
 ipcMain.handle("get-rule", async (event, id) => {
   return await getSingleRule(id)
+})
+
+// Uploads management
+ipcMain.handle("get-uploads", async (event) => {
+  return await getUploads()
+})
+
+ipcMain.handle("get-upload", async (event, id) => {
+  return await getUpload(id)
+})
+
+ipcMain.handle("get-upload-by-path", async (event, path) => {
+  return await getUploadByPath(path)
+})
+
+ipcMain.handle("add-upload", async (event, upload) => {
+  await addUpload(upload)
+})
+
+ipcMain.handle("modify-upload", async (event, upload) => {
+  await modifyUpload(upload)
+})
+
+ipcMain.handle("delete-upload", async (event, id) => {
+  await deleteUpload(id)
 })
 
 // Frame.io API and management

@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron"
 import { Rule } from "./types/Rule"
+import { Upload } from "./types/Upload"
 
 const handler = {
   send(channel: string, value: unknown) {
@@ -28,10 +29,21 @@ contextBridge.exposeInMainWorld("electron", {
     modifyRule: (rule: Rule) => ipcRenderer.invoke("modify-rule", rule),
     deleteRule: (id: string) => ipcRenderer.invoke("delete-rule", id),
   },
+  uploads: {
+    getUploads: () => ipcRenderer.invoke("get-uploads"),
+    getUpload: (id: string) => ipcRenderer.invoke("get-upload", id),
+    getUploadByPath: (path: string) =>
+      ipcRenderer.invoke("get-upload-by-path", path),
+    addUpload: (upload: Upload) => ipcRenderer.invoke("add-upload", upload),
+    modifyUpload: (upload: Upload) =>
+      ipcRenderer.invoke("modify-upload", upload),
+    deleteUpload: (id: string) => ipcRenderer.invoke("delete-upload", id),
+  },
   frameIo: {
     getFrameIoToken: () => ipcRenderer.invoke("get-frameio-token"),
-    setFrameIoToken: (token: string) => ipcRenderer.invoke("set-frameio-token", token),
-  }
+    setFrameIoToken: (token: string) =>
+      ipcRenderer.invoke("set-frameio-token", token),
+  },
 })
 
 contextBridge.exposeInMainWorld("ipc", handler)

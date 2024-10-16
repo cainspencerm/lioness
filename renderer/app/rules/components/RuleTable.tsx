@@ -1,6 +1,10 @@
 "use client"
 
-import { AdjustmentsHorizontalIcon, TrashIcon } from "@heroicons/react/16/solid"
+import {
+  AdjustmentsHorizontalIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/16/solid"
 import { rulesApi } from "@lib/electron"
 import { useRules } from "@lib/hooks"
 import { Rule } from "@main/types/Rule"
@@ -55,33 +59,31 @@ export function RuleTable() {
 
   const topContent = useMemo(
     () => (
-      <div className="flex justify-between items-center mb-4">
+      <div className="w-full flex items-center mb-2 gap-4">
         <Input
           placeholder="Search by rule name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-1/3"
+          className="w-full"
         />
-        <div className="flex items-center gap-4">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="flat">
-                Sort by: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              onAction={(key) => setSortBy(key as string)}
-              selectedKeys={[sortBy]}
-              selectionMode="single"
-            >
-              <DropdownItem key="name">Name</DropdownItem>
-              <DropdownItem key="directory">Directory</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-          <Button variant="solid" onClick={handleAddRuleClick}>
-            New Rule
-          </Button>
-        </div>
+        <Dropdown>
+          <DropdownTrigger>
+            <Button className="w-fit px-8">
+              Sort by: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            onAction={(key) => setSortBy(key as string)}
+            selectedKeys={[sortBy]}
+            selectionMode="single"
+          >
+            <DropdownItem key="name">Name</DropdownItem>
+            <DropdownItem key="directory">Directory</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <Button variant="shadow" isIconOnly onClick={handleAddRuleClick}>
+          <PlusIcon className="w-5 h-5" />
+        </Button>
       </div>
     ),
     [search, sortBy],
