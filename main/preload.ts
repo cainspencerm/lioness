@@ -17,13 +17,21 @@ const handler = {
 }
 
 // Expose the API for selecting a file or directory
-contextBridge.exposeInMainWorld("electronAPI", {
-  selectPath: () => ipcRenderer.invoke("select-path"),
-  getRules: () => ipcRenderer.invoke("get-rules"),
-  getRule: (id: string) => ipcRenderer.invoke("get-rule", id),
-  addRule: (rule: Rule) => ipcRenderer.invoke("add-rule", rule),
-  modifyRule: (rule: Rule) => ipcRenderer.invoke("modify-rule", rule),
-  deleteRule: (id: string) => ipcRenderer.invoke("delete-rule", id),
+contextBridge.exposeInMainWorld("electron", {
+  path: {
+    selectPath: () => ipcRenderer.invoke("select-path"),
+  },
+  rules: {
+    getRules: () => ipcRenderer.invoke("get-rules"),
+    getRule: (id: string) => ipcRenderer.invoke("get-rule", id),
+    addRule: (rule: Rule) => ipcRenderer.invoke("add-rule", rule),
+    modifyRule: (rule: Rule) => ipcRenderer.invoke("modify-rule", rule),
+    deleteRule: (id: string) => ipcRenderer.invoke("delete-rule", id),
+  },
+  frameIo: {
+    getFrameIoToken: () => ipcRenderer.invoke("get-frameio-token"),
+    setFrameIoToken: (token: string) => ipcRenderer.invoke("set-frameio-token", token),
+  }
 })
 
 contextBridge.exposeInMainWorld("ipc", handler)

@@ -1,8 +1,9 @@
 import { Rule } from "@main/types/Rule"
 import useSWR from "swr"
+import { rulesApi } from "./electron"
 
 export function useRules() {
-  const fetcher = () => window["electronAPI"].getRules()
+  const fetcher = () => rulesApi.getRules()
 
   const { data, isLoading, error, mutate } = useSWR("get-rules", fetcher)
 

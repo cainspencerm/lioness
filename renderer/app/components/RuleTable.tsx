@@ -9,17 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react"
-import { useRules } from "../lib/hooks"
+import { useRules } from "@lib/hooks"
 import { Rule } from "@main/types/Rule"
 import { AdjustmentsHorizontalIcon, TrashIcon } from "@heroicons/react/16/solid"
 
-import { deleteRule } from "@/app/electron"
+import { rulesApi } from "@lib/electron"
 
 export function RuleTable() {
   const { rules, isLoading, isError, mutate } = useRules()
 
   const handleDeleteRule = async (id: string) => {
-    await deleteRule(id)
+    await rulesApi.deleteRule(id)
 
     mutate(rules.filter((rule: Rule) => rule.id !== id))
   }

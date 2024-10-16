@@ -11,16 +11,10 @@ import {
 } from "@nextui-org/react"
 import { useState } from "react"
 import { Rule } from "@main/types/Rule"
-import { useRules } from "../lib/hooks"
+import { useRules } from "@lib/hooks"
 import { v4 as uuidv4 } from "uuid"
 
-const { addRule, selectPath } = (() => {
-  try {
-    return window["electronAPI"]
-  } catch (e) {
-    return {}
-  }
-})()
+import { rulesApi, pathApi } from "@lib/electron"
 
 export function AddRule() {
   const { mutate } = useRules()
@@ -33,7 +27,7 @@ export function AddRule() {
   })
 
   const handleAddRule = async () => {
-    await addRule(rule)
+    await rulesApi.addRule(rule)
 
     mutate()
 
@@ -50,7 +44,7 @@ export function AddRule() {
   }
 
   const handleBrowse = async () => {
-    const path = await selectPath()
+    const path = await pathApi.selectPath()
     if (path) {
       setRule((prev) => ({ ...prev, directory: path }))
     }

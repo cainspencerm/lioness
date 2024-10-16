@@ -10,6 +10,7 @@ import {
   getAllRules,
   getSingleRule,
 } from "./rules-management/rules-service"
+import { getFrameIoToken, setFrameIoToken } from "./rules-management/db"
 
 const isProd = process.env.NODE_ENV === "production"
 
@@ -45,10 +46,6 @@ app.on("window-all-closed", () => {
   app.quit()
 })
 
-ipcMain.on("message", async (event, arg) => {
-  event.reply("message", `${arg} World!`)
-})
-
 // Handle the file or directory selection
 ipcMain.handle("select-path", async () => {
   const result = await dialog.showOpenDialog({
@@ -62,7 +59,7 @@ ipcMain.handle("select-path", async () => {
   }
 })
 
-// Handle rules
+// Rules management
 ipcMain.handle("add-rule", async (event, rule) => {
   await addRule(rule)
 })
@@ -81,4 +78,13 @@ ipcMain.handle("get-rules", async () => {
 
 ipcMain.handle("get-rule", async (event, id) => {
   return await getSingleRule(id)
+})
+
+// Frame.io API and management
+ipcMain.handle("get-frameio-token", async () => {
+  return await getFrameIoToken()
+})
+
+ipcMain.handle("set-frameio-token", async (event, token) => {
+  await setFrameIoToken(token)
 })
