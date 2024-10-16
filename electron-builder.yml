@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.caintech.lioness
+productName: Lioness
+copyright: Copyright © 2024 Spencer Cain
 directories:
   output: dist
   buildResources: resources
