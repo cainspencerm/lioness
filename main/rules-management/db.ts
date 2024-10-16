@@ -2,7 +2,7 @@ import path from "path"
 import { app } from "electron"
 import { Low } from "lowdb/lib"
 import { JSONFilePreset } from "lowdb/node"
-import { Rule } from "./types/Rule"
+import { Rule } from "../types/Rule"
 
 type RulesData = {
   rules: Rule[]

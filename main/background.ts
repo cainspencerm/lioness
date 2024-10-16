@@ -9,8 +9,7 @@ import {
   deleteRule,
   getAllRules,
   getSingleRule,
-} from "./rulesService"
-import { Rule } from "./types/Rule"
+} from "./rules-management/rules-service"
 
 const isProd = process.env.NODE_ENV === "production"
 

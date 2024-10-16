@@ -1,5 +1,5 @@
 import chokidar, { FSWatcher } from "chokidar"
-import { Rule } from "./types/Rule"
+import { Rule } from "../types/Rule"
 import { minimatch } from "minimatch"
 import ffmpeg from "fluent-ffmpeg"
 

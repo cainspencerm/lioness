@@ -1,4 +1,4 @@
-import { Rule } from "./types/Rule"
+import { Rule } from "../types/Rule"
 import {
   getRules,
   getRule,
@@ -11,7 +11,7 @@ import {
   stopWatcher,
   restartWatcher,
   initializeWatchers,
-} from "./watcherManager"
+} from "./watcher-manager"
 
 // Initialize database and watchers
 export async function initialize() {
