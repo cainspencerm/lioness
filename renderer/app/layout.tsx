@@ -1,4 +1,11 @@
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+} from "@nextui-org/react"
 import localFont from "next/font/local"
+import Link from "next/link"
 import "./globals.css"
 import { Providers } from "./providers"
 
@@ -21,9 +28,28 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-fit min-h-screen p-8`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-fit min-h-screen flex`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar isBlurred>
+            <NavbarBrand>
+              <h2 className="font-bold text-xl">Lioness</h2>
+            </NavbarBrand>
+            <NavbarContent justify="end">
+              <NavbarItem>
+                <Link href="/rules">Rules</Link>
+              </NavbarItem>
+              <NavbarItem>
+                <Link href="/uploads">Uploads</Link>
+              </NavbarItem>
+              <NavbarItem>
+                <Link href="/settings">Settings</Link>
+              </NavbarItem>
+            </NavbarContent>
+          </Navbar>
+
+          <div className="px-8 w-full container mx-auto">{children}</div>
+        </Providers>
       </body>
     </html>
   )
