@@ -93,6 +93,8 @@ export function startWatcher(rule: Rule) {
     // Check if the file is complete
     checkFileCompleteness(filePath, async (isComplete, metadata) => {
       if (isComplete) {
+        console.log(`File ${filePath} is ready for processing`)
+
         // Obtain the lock for the file
         if (!mutexMap.has(filePath)) {
           mutexMap.set(filePath, new Mutex())

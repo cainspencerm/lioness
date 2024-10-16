@@ -51,17 +51,32 @@ export async function deleteRuleFromDb(id: string) {
 
 export async function getUploads() {
   if (!db) await initDb()
-  return db.data.uploads ?? []
+  return (
+    db.data.uploads.map((upload) => {
+      if (upload.date) {
+        upload.date = new Date(upload.date)
+      }
+      return upload
+    }) ?? []
+  )
 }
 
 export async function getUpload(id: string) {
   if (!db) await initDb()
-  return db.data.uploads.find((upload) => upload.id === id)
+  const upload = db.data.uploads.find((upload) => upload.id === id)
+  if (upload && upload.date) {
+    upload.date = new Date(upload.date)
+  }
+  return upload
 }
 
 export async function getUploadByPath(path: string) {
   if (!db) await initDb()
-  return db.data.uploads.find((upload) => upload.path === path)
+  const upload = db.data.uploads.find((upload) => upload.path === path)
+  if (upload && upload.date) {
+    upload.date = new Date(upload.date)
+  }
+  return upload
 }
 
 export async function addUpload(upload: Upload) {
