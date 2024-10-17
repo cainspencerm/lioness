@@ -14,6 +14,9 @@ import {
 import {
   connectFrameIo,
   disconnectFrameIo,
+  getAccounts,
+  getProjects,
+  getTeams,
   isConfigured,
   requestFrameIoAuthentication,
 } from "./frame-io"
@@ -175,6 +178,18 @@ ipcMain.handle("disconnect-frameio", async () => {
 
 ipcMain.handle("is-frameio-connected", async () => {
   return await isConfigured()
+})
+
+ipcMain.handle("get-accounts", async () => {
+  return await getAccounts()
+})
+
+ipcMain.handle("get-teams", async (event, accountId) => {
+  return await getTeams(accountId)
+})
+
+ipcMain.handle("get-projects", async (event, teamId) => {
+  return await getProjects(teamId)
 })
 
 // Debugging

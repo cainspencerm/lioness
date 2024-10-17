@@ -43,6 +43,9 @@ contextBridge.exposeInMainWorld("electron", {
     connectFrameIo: () => ipcRenderer.invoke("connect-frameio"),
     disconnectFrameIo: () => ipcRenderer.invoke("disconnect-frameio"),
     isFrameIoConnected: () => ipcRenderer.invoke("is-frameio-connected"),
+    getAccounts: () => ipcRenderer.invoke("get-accounts"),
+    getTeams: (accountId: string) => ipcRenderer.invoke("get-teams", accountId),
+    getProjects: (teamId: string) => ipcRenderer.invoke("get-projects", teamId),
   },
   debug: {
     addLog: (message: string) => ipcRenderer.invoke("add-log", message),

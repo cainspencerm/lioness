@@ -1,7 +1,7 @@
 "use client"
 
 import { pathApi, rulesApi } from "@lib/electron"
-import { useRules } from "@lib/hooks"
+import { useAccounts, useProjects, useRules, useTeams } from "@lib/hooks"
 import { Rule } from "@main/types/Rule"
 import {
   Accordion,
@@ -16,19 +16,35 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Select,
+  SelectItem,
 } from "@nextui-org/react"
 import { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 
 export function AddRuleModal({ isOpen, onClose }) {
-  const { mutate } = useRules()
-
   const [rule, setRule] = useState<Rule>({
     id: uuidv4(),
     name: "",
     directory: "",
     filters: [],
+    accountId: "",
+    projectId: "",
+    teamId: "",
   })
+
+  const { mutate } = useRules()
+  const {
+    accounts,
+    isLoading: isAccountsLoading,
+    isError: isAccountsError,
+  } = useAccounts()
+  const { teams, isLoading: isTeamsLoading } = useTeams(rule.accountId)
+  const { projects, isLoading: isProjectsLoading } = useProjects(rule.teamId)
+
+  const [filters, setFilters] = useState<string[]>(rule.filters ?? [])
+  const [currentFilter, setCurrentFilter] = useState("")
+  const [error, setError] = useState("")
 
   const handleAddRule = async () => {
     await rulesApi.addRule(rule)
@@ -67,10 +83,6 @@ export function AddRuleModal({ isOpen, onClose }) {
     setFilters([])
     onClose() // Close the modal on cancel
   }
-
-  const [filters, setFilters] = useState<string[]>(rule.filters ?? [])
-  const [currentFilter, setCurrentFilter] = useState("")
-  const [error, setError] = useState("")
 
   const updateFilters = (filters: string[]) => {
     setFilters(filters)
@@ -137,6 +149,7 @@ export function AddRuleModal({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       closeButton
+      size="3xl"
     >
       <ModalContent>
         <ModalHeader>Add New Rule</ModalHeader>
@@ -155,6 +168,45 @@ export function AddRuleModal({ isOpen, onClose }) {
               isReadOnly
             />
             <Button onClick={handleBrowse}>Browse</Button>
+          </div>
+          <div className="flex gap-2">
+            <div className="w-full">
+              <Select
+                label={rule.accountId === "" ? "Accounts" : "account"}
+                isDisabled={isAccountsLoading}
+              >
+                {accounts &&
+                  accounts.map((account) => (
+                    <SelectItem key={account.id} value={account.id}>
+                      {account.company}
+                    </SelectItem>
+                  ))}
+              </Select>
+            </div>
+            <div className="w-full">
+              <Select
+                label={rule.teamId === "" ? "Teams" : "team"}
+                isDisabled={rule.accountId === ""}
+              >
+                {teams.map((team) => (
+                  <SelectItem key={team.id} value={team.id}>
+                    {team.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            <div className="w-full">
+              <Select
+                label={rule.projectId === "" ? "Projects" : "project"}
+                isDisabled={rule.teamId === ""}
+              >
+                {projects.map((project) => (
+                  <SelectItem key={project.id} value={project.id}>
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
           </div>
           <Accordion>
             <AccordionItem key="1" title="Filter">

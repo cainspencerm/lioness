@@ -5,8 +5,9 @@ export const Rule = z.object({
   name: z.string(),
   directory: z.string(),
   filters: z.array(z.string()),
-  projectId: z.string(),
-  accountId: z.string(),
+  projectId: z.string().optional(),
+  accountId: z.string().optional(),
+  teamId: z.string().optional(),
 })
 
 export type Rule = z.infer<typeof Rule>

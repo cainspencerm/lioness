@@ -50,11 +50,12 @@ export const pathApi: PathAPI = (() => {
 })()
 
 type FrameIoAPI = {
-  getFrameIoToken: () => Promise<string | null>
-  setFrameIoToken: (token: string) => Promise<void>
   connectFrameIo: () => Promise<void>
   isFrameIoConnected: () => Promise<boolean>
   disconnectFrameIo: () => Promise<void>
+  getAccounts: () => Promise<any[]>
+  getTeams: (accountId: string) => Promise<any[]>
+  getProjects: (teamId: string) => Promise<any[]>
 }
 
 export const frameIoApi: FrameIoAPI = (() => {

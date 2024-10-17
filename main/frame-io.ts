@@ -130,4 +130,100 @@ export async function isConfigured() {
   return expiration !== undefined && expiration > Date.now()
 }
 
-export async function uploadAsset() {}
+export async function maintainToken() {
+  const store = new Store({
+    name: "frame-io",
+  })
+
+  const expiration = store.get("expiration", undefined) as number | undefined
+  if (expiration === undefined) {
+    return
+  }
+
+  // If the token is within a week of expiration, refresh it
+  const weekFromNow = Date.now() + 7 * 24 * 60 * 60 * 1000
+  if (expiration < weekFromNow) {
+    const refresh_token = store.get("refresh_token") as string
+
+    if (refresh_token) {
+      const response = await refreshToken(refresh_token)
+
+      if (response) {
+        const { access_token, refresh_token, expires_in } = response
+
+        store.set("access_token", access_token)
+        store.set("refresh_token", refresh_token)
+        store.set("expiration", Date.now() + expires_in * 1000)
+      }
+    }
+  }
+}
+
+async function getAccessToken() {
+  await maintainToken()
+
+  const store = new Store({
+    name: "frame-io",
+  })
+
+  return store.get("access_token") as string
+}
+
+export async function getAccounts() {
+  const accessToken = await getAccessToken()
+
+  const response = await axios
+    .get(process.env.FRAME_IO_API_URL + "/accounts", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .catch((e: AxiosError) => {
+      console.error("Error getting accounts:", e.response)
+      return null
+    })
+
+  if (!response) {
+    return null
+  }
+
+  return response.data
+}
+
+export async function getTeams(accountId: string) {
+  const accessToken = await getAccessToken()
+
+  const response = await axios
+    .get(process.env.FRAME_IO_API_URL + "/teams", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        account_id: accountId,
+      },
+    })
+    .catch((e: AxiosError) => {
+      console.error("Error getting teams:", e.response)
+      return null
+    })
+
+  if (!response) {
+    return null
+  }
+
+  return response.data
+}
+
+export async function getProjects(teamId: string) {
+  const accessToken = await getAccessToken()
+  const response = await axios.get(process.env.FRAME_IO_API_URL + "/projects", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    params: {
+      team_id: teamId,
+    },
+  })
+
+  return response.data
+}
