@@ -3,6 +3,7 @@
     "rules",
     "frame.io",
     "context-bridge",
-    "uploads"
+    "uploads",
+    "db"
   ]
 }

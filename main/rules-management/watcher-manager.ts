@@ -3,9 +3,9 @@ import chokidar, { FSWatcher } from "chokidar"
 import ffmpeg from "fluent-ffmpeg"
 import { minimatch } from "minimatch"
 import { v4 as uuidv4 } from "uuid"
+import { addUpload, getUploadByPath, modifyUpload } from "../db/uploads"
 import { Rule } from "../types/Rule"
 import { Upload } from "../types/Upload"
-import { addUpload, getUploadByPath, modifyUpload } from "./db"
 
 // A map to store active watchers by rule ID
 const watchers: Map<string, FSWatcher> = new Map()

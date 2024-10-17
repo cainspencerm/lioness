@@ -1,16 +1,16 @@
+import {
+  addRuleToDb,
+  deleteRuleFromDb,
+  getRule,
+  getRules,
+  modifyRuleInDb,
+} from "../db/rules"
 import { Rule } from "../types/Rule"
 import {
-  getRules,
-  getRule,
-  addRuleToDb,
-  modifyRuleInDb,
-  deleteRuleFromDb,
-} from "./db"
-import {
+  initializeWatchers,
+  restartWatcher,
   startWatcher,
   stopWatcher,
-  restartWatcher,
-  initializeWatchers,
 } from "./watcher-manager"
 
 // Initialize database and watchers

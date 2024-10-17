@@ -126,8 +126,8 @@ export async function isConfigured() {
   })
 
   const expiration = store.get("expiration", undefined) as number | undefined
-  console.log("Expiration:", expiration)
-  console.log("Current time:", Date.now())
 
   return expiration !== undefined && expiration > Date.now()
 }
+
+export async function uploadAsset() {}

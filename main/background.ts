@@ -2,6 +2,15 @@ import dotenv from "dotenv"
 import { app, dialog, ipcMain } from "electron"
 import serve from "electron-serve"
 import path from "path"
+import { addLog, getLogs } from "./db/logs"
+import {
+  addUpload,
+  deleteUpload,
+  getUpload,
+  getUploadByPath,
+  getUploads,
+  modifyUpload,
+} from "./db/uploads"
 import {
   connectFrameIo,
   disconnectFrameIo,
@@ -9,18 +18,6 @@ import {
   requestFrameIoAuthentication,
 } from "./frame-io"
 import { createWindow } from "./helpers"
-import {
-  addLog,
-  addUpload,
-  deleteUpload,
-  getFrameIoToken,
-  getLogs,
-  getUpload,
-  getUploadByPath,
-  getUploads,
-  modifyUpload,
-  setFrameIoToken,
-} from "./rules-management/db"
 import {
   addRule,
   deleteRule,
@@ -178,14 +175,6 @@ ipcMain.handle("disconnect-frameio", async () => {
 
 ipcMain.handle("is-frameio-connected", async () => {
   return await isConfigured()
-})
-
-ipcMain.handle("get-frameio-token", async () => {
-  return await getFrameIoToken()
-})
-
-ipcMain.handle("set-frameio-token", async (event, token) => {
-  await setFrameIoToken(token)
 })
 
 // Debugging

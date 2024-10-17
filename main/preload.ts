@@ -40,9 +40,6 @@ contextBridge.exposeInMainWorld("electron", {
     deleteUpload: (id: string) => ipcRenderer.invoke("delete-upload", id),
   },
   frameIo: {
-    getFrameIoToken: () => ipcRenderer.invoke("get-frameio-token"),
-    setFrameIoToken: (token: string) =>
-      ipcRenderer.invoke("set-frameio-token", token),
     connectFrameIo: () => ipcRenderer.invoke("connect-frameio"),
     disconnectFrameIo: () => ipcRenderer.invoke("disconnect-frameio"),
     isFrameIoConnected: () => ipcRenderer.invoke("is-frameio-connected"),
