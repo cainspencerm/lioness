@@ -1,7 +1,13 @@
-import { app, dialog, ipcMain, protocol } from "electron"
+import dotenv from "dotenv"
+import { app, dialog, ipcMain } from "electron"
 import serve from "electron-serve"
 import path from "path"
-import { createAuthUrl } from "./frame-io"
+import {
+  connectFrameIo,
+  disconnectFrameIo,
+  isConfigured,
+  requestFrameIoAuthentication,
+} from "./frame-io"
 import { createWindow } from "./helpers"
 import {
   addLog,
@@ -24,47 +30,64 @@ import {
   modifyRule,
 } from "./rules-management/rules-service"
 
-import dotenv from "dotenv"
+// Keep a global reference of the window object
+let mainWindow: Electron.BrowserWindow | null
 
 // Load the .env.local file into Electron's process
 dotenv.config({ path: path.resolve(__dirname, "..", ".env.local") })
 
+// Set the user data path
 const isProd = process.env.NODE_ENV === "production"
-
 if (isProd) {
   serve({ directory: "app" })
 } else {
   app.setPath("userData", `${app.getPath("userData")} (development)`)
 }
 
+// Ensure only one instance of the app is running (Windows)
 const gotTheLock = app.requestSingleInstanceLock()
-
 if (!gotTheLock) {
   app.quit()
 }
 
-;(async () => {
+// Register the app protocol for deep links
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient("lioness", process.execPath, [
+      path.resolve(process.argv[1]),
+    ])
+  } else {
+    app.setAsDefaultProtocolClient("lioness")
+  }
+}
+
+// Handle deep links
+app.on("open-url", (event, callingUrl) => {
+  event.preventDefault()
+
+  const url = new URL(callingUrl)
+  if (url.hostname === "frameio-callback") {
+    requestFrameIoAuthentication(url)
+  }
+})
+
+app.on("second-instance", (event, commandLine, workingDirectory) => {
+  // Someone tried to run a second instance, we should focus our window.
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+  }
+})
+
+const initAppWhenReady = async () => {
   await app.whenReady()
 
-  const mainWindow = createWindow("main", {
+  mainWindow = createWindow("main", {
     width: 1000,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
-  })
-
-  app.on("second-instance", (event, commandLine, workingDirectory) => {
-    // Someone tried to run a second instance, we should focus our window.
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
-    }
-    // the commandLine is array of strings in which last element is deep link url
-    dialog.showErrorBox(
-      "Welcome Back",
-      `You arrived from: ${commandLine.pop()}`,
-    )
   })
 
   if (isProd) {
@@ -76,59 +99,10 @@ if (!gotTheLock) {
   }
 
   await initialize()
-})()
-
-// Register the app protocol
-if (process.defaultApp) {
-  if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("lioness", process.execPath, [
-      path.resolve(process.argv[1]),
-    ])
-  } else {
-    app.setAsDefaultProtocolClient("lioness")
-  }
 }
 
-protocol.registerSchemesAsPrivileged([
-  { scheme: "lioness", privileges: { secure: true, standard: true } },
-])
-
-app.whenReady().then(() => {
-  protocol.handle("lioness", async (request) => {
-    console.log("Got request")
-    const url = new URL(request.url)
-
-    if (url.pathname === "/frameio-callback") {
-      const authCode = url.searchParams.get("code")
-      if (authCode) {
-        // Exchange the authCode for an access token here.
-        console.log("Authorization code:", authCode)
-
-        // You can return a success message or redirect the user back to your app's UI.
-        return new Response(
-          Buffer.from("<h1>Success. You can close this window.</h1>"),
-          {
-            status: 200,
-            headers: {
-              "Content-Type": "text/html",
-            },
-          },
-        )
-      }
-    }
-    return new Response(Buffer.from("<h1>Bad Request</h1>"), {
-      status: 400,
-      headers: {
-        "Content-Type": "text/html",
-      },
-    })
-  })
-})
-
-app.on("open-url", (event, url) => {
-  console.log("Open URL", url)
-  dialog.showErrorBox("Welcome Back", `You arrived from: ${url}`)
-})
+// Queue the initializer
+initAppWhenReady()
 
 app.on("window-all-closed", () => {
   app.quit()
@@ -195,7 +169,15 @@ ipcMain.handle("delete-upload", async (event, id) => {
 
 // Frame.io API and management
 ipcMain.handle("connect-frameio", async () => {
-  return await createAuthUrl()
+  return await connectFrameIo()
+})
+
+ipcMain.handle("disconnect-frameio", async () => {
+  return await disconnectFrameIo()
+})
+
+ipcMain.handle("is-frameio-connected", async () => {
+  return await isConfigured()
 })
 
 ipcMain.handle("get-frameio-token", async () => {

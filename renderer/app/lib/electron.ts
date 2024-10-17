@@ -53,6 +53,8 @@ type FrameIoAPI = {
   getFrameIoToken: () => Promise<string | null>
   setFrameIoToken: (token: string) => Promise<void>
   connectFrameIo: () => Promise<void>
+  isFrameIoConnected: () => Promise<boolean>
+  disconnectFrameIo: () => Promise<void>
 }
 
 export const frameIoApi: FrameIoAPI = (() => {

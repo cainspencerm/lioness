@@ -44,6 +44,8 @@ contextBridge.exposeInMainWorld("electron", {
     setFrameIoToken: (token: string) =>
       ipcRenderer.invoke("set-frameio-token", token),
     connectFrameIo: () => ipcRenderer.invoke("connect-frameio"),
+    disconnectFrameIo: () => ipcRenderer.invoke("disconnect-frameio"),
+    isFrameIoConnected: () => ipcRenderer.invoke("is-frameio-connected"),
   },
   debug: {
     addLog: (message: string) => ipcRenderer.invoke("add-log", message),

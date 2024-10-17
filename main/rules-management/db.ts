@@ -12,6 +12,7 @@ type UserData = {
   uploads: Upload[]
   frameIoToken?: string
   logs: Log[]
+  frameIoState?: string
 }
 
 let db: Low<UserData> | null = null
@@ -133,4 +134,15 @@ export async function addLog(message: string) {
 export async function getLogs() {
   if (!db) await initDb()
   return db.data.logs
+}
+
+export async function getFrameIoState(create: boolean = false) {
+  if (!db) await initDb()
+  if (!db.data.frameIoState || create) {
+    await db.update(() => {
+      db.data.frameIoState = uuidv4()
+    })
+  }
+
+  return db.data.frameIoState
 }
