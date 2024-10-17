@@ -1,5 +1,6 @@
 "use client"
 
+import { Log } from "@main/types/Log"
 import { Rule } from "@main/types/Rule"
 import { Upload } from "@main/types/Upload"
 
@@ -51,11 +52,25 @@ export const pathApi: PathAPI = (() => {
 type FrameIoAPI = {
   getFrameIoToken: () => Promise<string | null>
   setFrameIoToken: (token: string) => Promise<void>
+  connectFrameIo: () => Promise<void>
 }
 
 export const frameIoApi: FrameIoAPI = (() => {
   try {
     return window["electron"].frameIo
+  } catch (e) {
+    return {}
+  }
+})()
+
+type DebugAPI = {
+  addLog: (message: string) => Promise<void>
+  getLogs: () => Promise<Log[]>
+}
+
+export const debugApi: DebugAPI = (() => {
+  try {
+    return window["electron"].debug
   } catch (e) {
     return {}
   }

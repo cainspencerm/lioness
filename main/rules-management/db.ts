@@ -2,6 +2,8 @@ import { app } from "electron"
 import { Low } from "lowdb/lib"
 import { JSONFilePreset } from "lowdb/node"
 import path from "path"
+import { v4 as uuidv4 } from "uuid"
+import { Log } from "../types/Log"
 import { Rule } from "../types/Rule"
 import { Upload } from "../types/Upload"
 
@@ -9,13 +11,18 @@ type UserData = {
   rules: Rule[]
   uploads: Upload[]
   frameIoToken?: string
+  logs: Log[]
 }
 
 let db: Low<UserData> | null = null
 
 export async function initDb() {
   const dbFile = path.join(app.getPath("userData"), "db.json")
-  db = await JSONFilePreset<UserData>(dbFile, { rules: [], uploads: [] })
+  db = await JSONFilePreset<UserData>(dbFile, {
+    rules: [],
+    uploads: [],
+    logs: [],
+  })
 }
 
 export async function getRules() {
@@ -110,4 +117,20 @@ export async function setFrameIoToken(token: string) {
   await db.update(() => {
     db!.data.frameIoToken = token
   })
+}
+
+export async function addLog(message: string) {
+  if (!db) await initDb()
+
+  const log: Log = {
+    id: uuidv4(),
+    message: message,
+    timestamp: new Date().getTime(),
+  }
+  await db.update(({ logs }) => logs.push(log))
+}
+
+export async function getLogs() {
+  if (!db) await initDb()
+  return db.data.logs
 }

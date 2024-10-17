@@ -9,4 +9,10 @@ files:
     filter:
       - package.json
       - app
+      - .env.local
 publish: null
+protocols:
+  name: Lioness
+  schemes:
+    - lioness
+  role: Editor

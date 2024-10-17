@@ -43,6 +43,9 @@ export default function RootLayout({
                 <Link href="/uploads">Uploads</Link>
               </NavbarItem>
               <NavbarItem>
+                <Link href="/logs">Logs</Link>
+              </NavbarItem>
+              <NavbarItem>
                 <Link href="/settings">Settings</Link>
               </NavbarItem>
             </NavbarContent>
